@@ -1,39 +1,65 @@
-const readline = require('readline');
+const readline = require('readline'); // Require du module readline pour intéragir avec le prompt via les input qu'on enverra et les output qu'on recevra.
 
 // Initialisation du jeu par un pick random du mot à deviner à l'aide d'un Math.random() sur une base prédeterminée de mots disponibles.
-const words = ["hangman", "test", "surement", "asterix", "calcul", "framboise"];
-let word = words[Math.floor(Math.random() * words.length)];
+const words   = ["pendu", "chaise", "", "armoire", "calcul", "framboise", "lampe", "carotte", ""];
+let word      = words[Math.floor(Math.random() * words.length)];
 let guessWord = word.replace(/[a-z]/gi, "_");
-console.log(word.split(""));
-console.log();
-// let exist = word.split("").some((elt) => {return elt === "a"});
-// if (exist === true) {
-// 	for (let i = 0; i < word.length; i++) {
-// 		if (word[i] === "a") {
-// 			guessWord = guessWord.split("");
-// 			guessWord[i] = "a";
-// 			guessWord = guessWord.join("");
-// 		}
-// 	}
-// }
+let count     = 8;
+// Présentation des règles.
+console.log(`
 
-console.log(guessWord);
+You started a Hangman round. \nHere are the rules :
+You have to guess which letters the word possesses,
+You can guess only one letter per try,
+You can fail ${count} time,
+There is no special characters nor capital letters(will count as a bad guess !),
+There is only french words to guess,
+
+Good luck !
+
+`);	
+
+
 const rl = readline.createInterface(process.stdin, process.stdout);
- 
-rl.question(`Here is the word : ${guessWord} guess the remaining letters, you have 5 chances ! >`, (guess) => {
-	let exist = word.split("").some((elt) => {return elt === guess});
-	if (exist === true) {
-		for (let i = 0; i < word.length; i++) {
-			if (word[i] === guess) {
-				guessWord = guessWord.split("");
-				guessWord[i] = guess;	
-				guessWord = guessWord.join("");
+// Création d'une interface software/prompt grace à la méthode createInterface de l'objet readline.
+
+
+let hangman = () => {
+	rl.question(`The word is : "${guessWord.split("").join(" ")}" guess the remaining letters ! \n>>>`, (guess) => {
+		let exist = word.split("").some((elt) => {return elt === guess});
+
+		if (guess === "exit") {
+			console.log("See you soon\n");
+			return rl.close();
+		} else if (exist === true) {
+			for (let i = 0; i < word.length; i++) {
+				if (word[i] === guess) {
+					guessWord = guessWord.split("");
+					guessWord[i] = guess;	
+					guessWord = guessWord.join("");
+				}
+			} console.log(`Congratulation, this word contains the letter "${guess}" !\n\n\n`);
+		} else {
+			count--;
+			if (guess.length !== 1 || guess.match(/[a-z]/) === null) {
+				console.log(`"${guess}" is an invalid entry !`);
+			} else {
+				console.log(`There is no "${guess}" !`);	
 			}
-		} console.log(`Congratulation, this word contains the letter "${guess}" !`);
+			console.log(`You have ${count} chances left\n\n\n`);
+			if (count === 0) {
+				console.log(`It was your last chance, the word was "${word}", may the hanged rest in peace.\n`);
+				return rl.close();
+			}
+		}
 
-	} else {
-		console.log(`There is no "${guess}" in ${guessWord} !`);	
-	}
+		if (guessWord.match(/[_]/g) === null) {
+			console.log(`You won ! The word was "${word}", no one will have to be hanged today. \n`);
+			return rl.close();
+		}
+		hangman(); // appel de la fonction à l'intérieur d'elle meme.
+	});
+};
 
-	rl.close();
-})
+hangman();
+// Lancement de la fonction récursive hangman() qui ne s'arretera pas tant que certaines conditions sont vérifiés.
