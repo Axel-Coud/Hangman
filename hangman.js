@@ -1,10 +1,10 @@
 const readline = require('readline'); // Require du module readline pour intéragir avec le prompt via les input qu'on enverra et les output qu'on recevra.
 
 // Initialisation du jeu par un pick random du mot à deviner à l'aide d'un Math.random() sur une base prédeterminée de mots disponibles.
-const words   = ["pendu", "chaise", "", "armoire", "calcul", "framboise", "lampe", "carotte", ""];
+const words   = ["pendu", "chaise", "chaussure", "armoire", "calcul", "framboise", "lampe", "carotte", "crayon", "anticonstitutionnellement"];
 let word      = words[Math.floor(Math.random() * words.length)];
 let guessWord = word.replace(/[a-z]/gi, "_");
-let count     = 8;
+let count     = 6;
 // Présentation des règles.
 console.log(`
 
@@ -46,9 +46,19 @@ let hangman = () => {
 			} else {
 				console.log(`There is no "${guess}" !`);	
 			}
-			console.log(`You have ${count} chances left\n\n\n`);
+			console.log(`You have ${count} chances left\n\n`);
 			if (count === 0) {
-				console.log(`It was your last chance, the word was "${word}", may the hanged rest in peace.\n`);
+				console.log(`			     
+_________
+|/      |
+|      (_)
+|      \\|/
+|       |
+|      / \\
+|
+|___
+
+It was your last chance, the word was "${word}", may the hanged rest in peace.\n`);
 				return rl.close();
 			}
 		}
