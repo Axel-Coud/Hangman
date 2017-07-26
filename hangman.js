@@ -32,6 +32,10 @@ let hangman = () => {
 			console.log("See you soon\n");
 			return rl.close();
 		} else if (exist === true) {
+			if (guessWord.split("").some((elt) => {return elt === guess}) === true) {
+				console.log("You already gave this answer !\n\n");
+				return hangman()
+			}
 			for (let i = 0; i < word.length; i++) {
 				if (word[i] === guess) {
 					guessWord = guessWord.split("");
@@ -48,6 +52,7 @@ let hangman = () => {
 			}
 			console.log(`You have ${count} chances left\n\n`);
 			if (count === 0) {
+				console.log(`The word was ${word}.`);
 				console.log(`			     
 _________
 |/      |
@@ -67,7 +72,7 @@ It was your last chance, the word was "${word}", may the hanged rest in peace.\n
 			console.log(`You won ! The word was "${word}", no one will have to be hanged today. \n`);
 			return rl.close();
 		}
-		hangman(); // appel de la fonction à l'intérieur d'elle meme.
+		hangman(); // appel de la fonction à l'intérieur d'elle meme(Récursivité).
 	});
 };
 
