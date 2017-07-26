@@ -24,7 +24,7 @@ const rl = readline.createInterface(process.stdin, process.stdout);
 // Création d'une interface software/prompt grace à la méthode createInterface de l'objet readline.
 
 
-let hangman = () => {
+const hangman = () => {
 	rl.question(`The word is : "${guessWord.split("").join(" ")}" guess the remaining letters ! \n>>>`, (guess) => {
 		let exist = word.split("").some((elt) => {return elt === guess});
 
@@ -34,7 +34,7 @@ let hangman = () => {
 		} else if (exist === true) {
 			if (guessWord.split("").some((elt) => {return elt === guess}) === true) {
 				console.log("You already gave this answer !\n\n");
-				return hangman()
+				return hangman() // rappel récursif si le guess a déjà été proposé.
 			}
 			for (let i = 0; i < word.length; i++) {
 				if (word[i] === guess) {
@@ -72,9 +72,9 @@ It was your last chance, the word was "${word}", may the hanged rest in peace.\n
 			console.log(`You won ! The word was "${word}", no one will have to be hanged today. \n`);
 			return rl.close();
 		}
-		hangman(); // appel de la fonction à l'intérieur d'elle meme(Récursivité).
+		hangman(); // Rappel récursif si les conditions de défaites ou de victoire ne sont pas remplies.
 	});
 };
 
 hangman();
-// Lancement de la fonction récursive hangman() qui ne s'arretera pas tant que certaines conditions sont vérifiés.
+// Lancement de la fonction qui ne s'arretera pas tant que certaines conditions sont vérifiés.
